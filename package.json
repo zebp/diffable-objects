@@ -1,0 +1,38 @@
+{
+  "name": "diffable-objects",
+  "version": "0.0.0",
+  "description": "A package for dynamic state tracking for Cloudflare's Durable Objects using SQLite",
+  "author": "Zeb Piasecki <zeb@zebulon.dev>",
+  "repository": "https://github.com/zebp/diffable-objects",
+  "license": "MIT",
+  "keywords": ["cloudflare", "workers", "durable-objects", "sqlite"],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "format": "biome format ./src ./test --write",
+    "check:lint": "biome lint ./src ./test",
+    "check:format": "biome format ./src ./test",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
+    "@cloudflare/workers-types": "^4.20241224.0",
+    "typescript": "^5.7.2",
+    "vitest": "2.1.8"
+  },
+  "dependencies": {
+    "json-diff-ts": "^4.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "lodash": "npm:@technically/lodash"
+    }
+  }
+}
