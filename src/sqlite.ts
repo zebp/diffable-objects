@@ -70,25 +70,28 @@ export class SqliteState<T extends object> {
 
     if (!result.done) {
       const { value, changes_id } = result.value;
-      const changes = this.#db.exec<Change>(
-        "SELECT * FROM changes WHERE id > ? AND state = ?",
-        changes_id,
-        this.#name,
-      );
+      const changes = this.#db
+        .exec<Change>(
+          "SELECT * FROM changes WHERE id > ? AND state = ?",
+          changes_id,
+          this.#name,
+        )
+        .toArray();
 
       const actions: TrackerActions = [
         {
           type: "snapshot",
           value: JSON.parse(value),
         },
-        ...mapChanges(changes.toArray()),
+        ...mapChanges(changes),
       ];
-
       return replay(actions, initialValue);
     }
 
-    const changes = this.#db.exec<Change>("SELECT * FROM changes");
-    return replay(mapChanges(changes.toArray()), initialValue);
+    const changes = this.#db
+      .exec<Change>("SELECT * FROM changes WHERE state = ?", this.#name)
+      .toArray();
+    return replay(mapChanges(changes), initialValue);
   }
 
   appendChanges(changes: IAtomicChange[]): void {
@@ -110,6 +113,36 @@ export class SqliteState<T extends object> {
         );
       }
     });
+  }
+
+  latestChange(): { id: number } | null {
+    const result = this.#db
+      .exec<{ id: number }>(
+        "SELECT id FROM changes WHERE state = ? ORDER BY id DESC LIMIT 1",
+        this.#name,
+      )
+      .next();
+
+    if (result.done) {
+      return null;
+    }
+
+    return { id: result.value.id };
+  }
+
+  latestSnapshot(): Date | null {
+    const result = this.#db
+      .exec<{ created_at: string }>(
+        "SELECT created_at FROM snapshots WHERE state = ? ORDER BY created_at DESC LIMIT 1",
+        this.#name,
+      )
+      .next();
+
+    if (result.done) {
+      return null;
+    }
+
+    return new Date(result.value.created_at);
   }
 
   snapshot(snapshot: T): void {
