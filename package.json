@@ -1,12 +1,14 @@
 {
   "name": "diffable-objects",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A package for dynamic state tracking for Cloudflare's Durable Objects using SQLite",
   "author": "Zeb Piasecki <zeb@zebulon.dev>",
   "repository": "https://github.com/zebp/diffable-objects",
   "license": "MIT",
   "keywords": ["cloudflare", "workers", "durable-objects", "sqlite"],
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
