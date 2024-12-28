@@ -2,10 +2,7 @@ import { recursivelyObservable } from "./observable.js";
 import { SqliteState } from "./sqlite.js";
 import { unreachable } from "./util.js";
 
-export type SnapshotPolicy =
-  | "never"
-  | "every-change"
-  | { changes: number };
+export type SnapshotPolicy = "never" | "every-change" | { changes: number };
 
 export type StateOptions = {
   snapshotPolicy: SnapshotPolicy;
