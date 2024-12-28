@@ -16,22 +16,22 @@ export type StateOptions = {
 
 /**
  * Dynamically create a state object that persists changes to durable storage using Proxy and SQLite.
- * 
+ *
  * @example
  * ```
  * import { DurableObject } from "cloudflare:workers";
  * import { state } from "diffable-objects";
- * 
+ *
  * class Counter extends DurableObject {
  *   #state = state(this, "counter", { count: 0 });
- * 
+ *
  *   async fetch(request) {
  *     this.#state.count += 1;
  *     return new Response(`Count: ${this.#state.count}`);
  *   }
  * }
  * ```
- * 
+ *
  * @param ctx the DurableObject state.
  * @param name the name of the state, typically the name of the field.
  * @param initialState the initial state of this object, this must be the same every time the DO is created.

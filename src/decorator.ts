@@ -29,15 +29,15 @@ type DiffableOpts = {
 
 /**
  * Dynamically create a state object that persists changes to durable storage using Proxy and SQLite.
- * 
+ *
  * ```
  * import { DurableObject } from "cloudflare:workers";
  * import { diffable } from "diffable-objects";
- * 
+ *
  * class Counter extends DurableObject {
  *   @diffable
  *   #state = { count: 0 };
- * 
+ *
  *   async fetch(request) {
  *     this.#state.count += 1;
  *     return new Response(`Count: ${this.#state.count}`);
@@ -51,15 +51,15 @@ export function diffable(
 ): FieldDecoratorReturn<any>;
 /**
  * Dynamically create a state object that persists changes to durable storage using Proxy and SQLite.
- * 
+ *
  * ```
  * import { DurableObject } from "cloudflare:workers";
  * import { diffable } from "diffable-objects";
- * 
+ *
  * class Counter extends DurableObject {
  *   @diffable("counter")
  *   #state = { count: 0 };
- * 
+ *
  *   async fetch(request) {
  *     this.#state.count += 1;
  *     return new Response(`Count: ${this.#state.count}`);
@@ -70,15 +70,15 @@ export function diffable(
 export function diffable(name?: string): FieldDecoratorFactoryReturn<any>;
 /**
  * Dynamically create a state object that persists changes to durable storage using Proxy and SQLite.
- * 
+ *
  * ```
  * import { DurableObject } from "cloudflare:workers";
  * import { diffable } from "diffable-objects";
- * 
+ *
  * class Counter extends DurableObject {
  *   @diffable({ name: "counter", snapshotPolicy: "never" })
  *   #state = { count: 0 };
- * 
+ *
  *   async fetch(request) {
  *     this.#state.count += 1;
  *     return new Response(`Count: ${this.#state.count}`);
