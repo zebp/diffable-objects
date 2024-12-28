@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc -p tsconfig.build.json -w",
     "format": "biome format ./src ./test --write",
     "check:lint": "biome lint ./src ./test",
     "check:format": "biome format ./src ./test",

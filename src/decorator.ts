@@ -16,15 +16,76 @@ type DiffableArgs =
   | [_: any, { kind: string; name: string }];
 
 type DiffableOpts = {
+  /**
+   * The name of the state, typically the name of the field.
+   */
   name?: string;
+  /**
+   * Diffable-objects will automatically snapshot the state perodically based on this policy to minimize
+   * the number of diffs that must be applied to restore the state when the Durable Object is restarted.
+   */
   snapshotPolicy?: SnapshotPolicy;
 };
 
+/**
+ * Dynamically create a state object that persists changes to durable storage using Proxy and SQLite.
+ * 
+ * ```
+ * import { DurableObject } from "cloudflare:workers";
+ * import { diffable } from "diffable-objects";
+ * 
+ * class Counter extends DurableObject {
+ *   @diffable
+ *   #state = { count: 0 };
+ * 
+ *   async fetch(request) {
+ *     this.#state.count += 1;
+ *     return new Response(`Count: ${this.#state.count}`);
+ *   }
+ * }
+ * ```
+ */
 export function diffable(
   _: any,
   { kind, name }: { kind: string; name: string },
 ): FieldDecoratorReturn<any>;
+/**
+ * Dynamically create a state object that persists changes to durable storage using Proxy and SQLite.
+ * 
+ * ```
+ * import { DurableObject } from "cloudflare:workers";
+ * import { diffable } from "diffable-objects";
+ * 
+ * class Counter extends DurableObject {
+ *   @diffable("counter")
+ *   #state = { count: 0 };
+ * 
+ *   async fetch(request) {
+ *     this.#state.count += 1;
+ *     return new Response(`Count: ${this.#state.count}`);
+ *   }
+ * }
+ * ```
+ */
 export function diffable(name?: string): FieldDecoratorFactoryReturn<any>;
+/**
+ * Dynamically create a state object that persists changes to durable storage using Proxy and SQLite.
+ * 
+ * ```
+ * import { DurableObject } from "cloudflare:workers";
+ * import { diffable } from "diffable-objects";
+ * 
+ * class Counter extends DurableObject {
+ *   @diffable({ name: "counter", snapshotPolicy: "never" })
+ *   #state = { count: 0 };
+ * 
+ *   async fetch(request) {
+ *     this.#state.count += 1;
+ *     return new Response(`Count: ${this.#state.count}`);
+ *   }
+ * }
+ * ```
+ */
 export function diffable(
   options: DiffableOpts,
 ): FieldDecoratorFactoryReturn<any>;
