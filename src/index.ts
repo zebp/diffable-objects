@@ -2,10 +2,12 @@ import { recursivelyObservable } from "./observable.js";
 import { SqliteState } from "./sqlite.js";
 import { unreachable } from "./util.js";
 
+export * from "./decorator.js";
+
 export type SnapshotPolicy = "never" | "every-change" | { changes: number };
 
 export type StateOptions = {
-  snapshotPolicy: SnapshotPolicy;
+  snapshotPolicy?: SnapshotPolicy;
 };
 
 export function state<T extends object>(
@@ -21,7 +23,7 @@ export function state<T extends object>(
   return recursivelyObservable(data, {
     onUpdate(changes, data) {
       state.appendChanges(changes);
-      maybeSnapshot(data, state, options.snapshotPolicy);
+      maybeSnapshot(data, state, options.snapshotPolicy ?? { changes: 10 });
     },
   });
 }

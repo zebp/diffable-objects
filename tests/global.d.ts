@@ -1,5 +1,5 @@
 declare module "cloudflare:test" {
-    interface ProvidedEnv {
-        test: DurableObjectNamespace;
-    }
+  interface ProvidedEnv {
+    test: DurableObjectNamespace;
+  }
 }

@@ -12,8 +12,8 @@ export default defineWorkersConfig({
             test: {
               className: "TestDurableObject",
               useSQLite: true,
-            }
-          }
+            },
+          },
         },
       },
     },

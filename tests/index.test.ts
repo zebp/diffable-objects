@@ -1,14 +1,6 @@
 import { describe, expect } from "vitest";
-import { durableIt } from "./helper.js";
+import { durableIt, snapshots } from "./helper.js";
 import * as diffable from "../src/index.js";
-
-type SnapshotRow = {
-  id: number;
-  state: string;
-  value: string;
-  changes_id: number;
-  created_at?: string;
-};
 
 describe("state tracking", () => {
   durableIt("should be able to track changes in root object", (objectState) => {
@@ -20,27 +12,23 @@ describe("state tracking", () => {
     expect(newCopyOfState).toEqual({ a: 3, b: 2 });
   });
 
-  durableIt(
-    "should never snapshot",
-    (objectState) => {
-      const state = diffable.state(
-        objectState,
-        "test",
-        { count: 0 },
-        {
-          snapshotPolicy: "never",
-        },
-      );
+  durableIt("should never snapshot", (objectState) => {
+    const state = diffable.state(
+      objectState,
+      "test",
+      { count: 0 },
+      {
+        snapshotPolicy: "never",
+      },
+    );
 
-      for (let i = 0; i < 500; i++) {
-        state.count++;
-      }
+    for (let i = 0; i < 500; i++) {
+      state.count++;
+    }
 
-      const snapshotRows = snapshots(objectState.storage.sql);
-      expect(snapshotRows).toEqual([]);
-    },
-  );
-
+    const snapshotRows = snapshots(objectState.storage.sql);
+    expect(snapshotRows).toEqual([]);
+  });
 
   durableIt(
     "should automatically snapshot after every change",
@@ -127,17 +115,3 @@ describe("state tracking", () => {
     `);
   });
 });
-
-function snapshots(sql: SqlStorage) {
-  return sql
-    .exec<SnapshotRow>("SELECT * FROM snapshots")
-    .toArray()
-    .map((row) => {
-      // biome-ignore lint/performance/noDelete: <explanation>
-      delete row.created_at;
-      return {
-        ...row,
-        value: JSON.parse(row.value),
-      };
-    });
-}
