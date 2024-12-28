@@ -31,6 +31,10 @@ $ bun add diffable-objects
 
 ## Example 
 
+> For complete examples see the [examples](./examples/) directory.
+
+Basic example of `diffable-objects`.
+
 ```typescript
 import { DurableObject } from "cloudflare:workers";
 export { diffable, state } from "diffable-objects";
